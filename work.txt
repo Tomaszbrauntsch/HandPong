@@ -1,0 +1,1 @@
+Manipulate item position and incooperating it with canvas drawing -> display the item position, where the hand is moving -> calibrating camera each time
