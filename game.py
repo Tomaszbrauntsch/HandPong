@@ -2,16 +2,16 @@
 #Everything is being built like a gui, layer over layer
 #displaySurf = Main window
 #
-
+#WORK ON OPENCV NOW
 import pygame, sys
 from pygame.locals import *
 
 import random
 #number of frames per second
 #value determines speed of game
-FPS = 200 #default 200
-windowWidth = 400
-windowHeight = 300
+FPS = 300 #default 200
+windowWidth = 400 #default 400
+windowHeight = 300 #default 300
 lineThickness = 6
 paddleSize = 50
 paddleOffset = 20
@@ -55,9 +55,7 @@ def checkEdgeCollision(ball, ballDirX, ballDirY):
     #Checks if top or bottom of ball then changes the ball direction by negative (x or y)
     if ball.top == (lineThickness) or ball.bottom == (windowHeight - lineThickness):
         ballDirY = ballDirY * -1
-    if ball.left == (lineThickness) or ball.right == (windowWidth - lineThickness):
         #Add scoreboard when it gets completed when hits left or right and resets position
-        ballDirX = ballDirX * -1
     return ballDirX, ballDirY
 
 def AI(ball, ballDirX, playerTwo):
@@ -78,26 +76,46 @@ def AI(ball, ballDirX, playerTwo):
 
 def checkHitBall(ball, playerOne, playerTwo, ballDirX):
     #If if statment is true (if ball collides with paddle) changes the ballDirX by negative if all false leave it in its current form
-    #elif ballDirX == 1 and ((playerTwo.left == ball.right) or (playerTwo.top <= ball.top) or (playerTwo.bottom >= ball.bottom))
     if ballDirX == -1 and ((playerOne.right == ball.left and playerOne.top <= ball.top and playerOne.bottom >= ball.bottom)):
+
         return -1
     elif ballDirX == 1 and ((playerTwo.left == ball.right and playerTwo.top <= ball.top and playerTwo.bottom >= ball.bottom)):
         return -1
     else:
         return 1
 
-def checkPointScored(playerOne, playerTwo, ball, scoreLeft, scoreRight, ballDirX):
-    if ball.left == lineThickness:
-        return 0
-    #on hit
-    elif ballDirX == -1 and ((playerOne.right == ball.left and playerOne.top <= ball.top and playerOne.bottom >= ball.bottom)):
+def pointScoredp1(ball, scoreLeft, directionBall, ballDirX, ballDirY):
+    #if player-side wall gets hit give score opposite side
+    #ball hits left side
+    if ball.right == (windowWidth - lineThickness):
         scoreLeft += 1
-        print("scoreLeft: " + str(scoreLeft))
+        ball.x = 197 #moves to default x
+        ball.y = 147 #moves to default y
+        directionBall = random.randint(0,6)
+        ballDirX = -1
+        if directionBall <= 3:
+            ballDirY = -1
+        else:
+            ballDirY = 1
         return scoreLeft
-    elif ballDirX == -1 and ((playerTwo.left == ball.right and playerTwo.top <= ball.top and playerTwo.bottom >= ball.bottom)):
+    else:
+        return scoreLeft
+
+def pointScoredp2(ball, scoreRight, directionBall, ballDirX, ballDirY):
+    if ball.left == (lineThickness):
         scoreRight += 1
-        print("scoreRight: " + str(scoreRight))
+        ball.x = 197 #moves to default x
+        ball.y = 147 #moves to default y
+        directionBall = random.randint(0,6)
+        ballDirX = 1
+        if directionBall <= 3:
+            ballDirY = -1
+        else:
+            ballDirY = 1
         return scoreRight
+    else:
+        return scoreRight
+        #ball hits right side
 #TODO: Score is not working left and right will each get different score
 def displayScore(scoreLeft, scoreRight):
     #display text
@@ -109,6 +127,7 @@ def displayScore(scoreLeft, scoreRight):
 def main():
     pygame.init()
     global displaySurf
+    #used for score text
     global basicFont, basicFontSize
     basicFontSize = 20
     basicFont = pygame.font.Font('freesansbold.ttf', basicFontSize)
@@ -124,7 +143,6 @@ def main():
     playerTwoPos = (windowHeight - paddleSize)/2
     scoreLeft = 0
     scoreRight = 0
-
     #Track of ball direction  || RNG system
     # When X is - = left || + = right
     # When Y is - = up || + = down
@@ -140,19 +158,19 @@ def main():
             ballDirY = -1
         else:
             ballDirY = 1
-
     #creating rectangles for paddles and ball
     playerOne = pygame.Rect(paddleOffset,playerOnePos, lineThickness,paddleSize)
     playerTwo = pygame.Rect(windowWidth - paddleOffset - lineThickness, playerTwoPos, lineThickness, paddleSize)
     ball = pygame.Rect(ballX, ballY, lineThickness, lineThickness)
-
+    print("ball x: " + str(ball.x))
+    print("ball y: " + str(ball.y))
     #spygame.mouse.set_visible(0) # make cursor invisible
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-            #player movement
+            #Player Movement
             elif event.type == MOUSEMOTION:
                 mousex, mousey = event.pos
                 playerOne.y = mousey
@@ -164,7 +182,8 @@ def main():
 
         ball = moveBall(ball, ballDirX, ballDirY)
         ballDirX, ballDirY = checkEdgeCollision(ball, ballDirX, ballDirY)
-        score = checkPointScored(playerOne, playerTwo, ball, scoreLeft, scoreRight, ballDirX)
+        scoreLeft = pointScoredp1(ball, scoreLeft, directionBall, ballDirX, ballDirY)
+        scoreRight = pointScoredp2(ball, scoreRight, directionBall, ballDirX, ballDirY)
         #ball hit detection
         ballDirX = ballDirX * checkHitBall(ball, playerOne, playerTwo, ballDirX)
         playerTwo = AI(ball, ballDirX, playerTwo)

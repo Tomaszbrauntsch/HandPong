@@ -1,30 +1,33 @@
-import cv2
-import numpy as np
-while(1):
-
-    img = cv2.imread('testb.jpg',1)
-
-    # Convert BGR to HSV
-    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-
-    # define range of blue color in HSV
-    upper_blue = np.array([4,189,130])
-    lower_blue = np.array([37,255,255])
-
-    # Threshold the HSV image to get only blue colors
-    mask = cv2.inRange(hsv, upper_blue, lower_blue)
-
-    # Bitwise-AND mask and original image
-    res = cv2.bitwise_and(img,img, mask= mask)
-
-    cv2.imshow('img',img)
-    cv2.imshow('mask',mask)
-    cv2.imshow('res',res)
-    k = cv2.waitKey(5) & 0xFF
-    if k == 27:
-        sys.exit()
-
-cv2.destroyAllWindows()
+# import cv2
+# import numpy as np
+# while(1):
+#
+#     img = cv2.imread('testb.jpg',1)
+#
+#     # Convert BGR to HSV
+#     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+#
+#     # define range of blue color in HSV
+#     upper_blue = np.array([4,189,130])
+#     lower_blue = np.array([37,255,255])
+#
+#     # Threshold the HSV image to get only blue colors
+#     mask = cv2.inRange(hsv, upper_blue, lower_blue)
+#
+#     # Bitwise-AND mask and original image
+#     res = cv2.bitwise_and(img,img, mask= mask)
+#
+#     cv2.imshow('img',img)
+#     cv2.imshow('mask',mask)
+#     cv2.imshow('res',res)
+#     k = cv2.waitKey(5) & 0xFF
+#     if k == 27:
+#         sys.exit()
+#
+# cv2.destroyAllWindows()
+#
+#DETERMINE hsv
+#
 # from __future__ import print_function
 # import cv2 as cv
 # import argparse
@@ -103,3 +106,16 @@ cv2.destroyAllWindows()
 #     key = cv.waitKey(30)
 #     if key == ord('q') or key == 27:
 #         break
+import numpy as np
+import cv2
+
+cap = cv2.VideoCapture(0)
+
+time.sleep(3)
+
+background = 0
+
+for i in range(30):
+    ret,background = cap.read()
+
+background = np.flip(background, axis = 1)
