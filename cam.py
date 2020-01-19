@@ -1,6 +1,13 @@
 import numpy as np
 import cv2
 
+
+def mapObjectPosition(x, y):
+    if (x == 341):
+        print("x = " + x)
+        print("whats up bud")
+        print("y = " + y)
+        
 cap = cv2.VideoCapture(0)
 while(True):
     ret, frame = cap.read()
@@ -26,6 +33,10 @@ while(True):
         if radius > 10:
             cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
             cv2.circle(frame, center, 5, (0,0,255), -1)
+
+            mapObjectPosition(int(x), int(y))
+
+
     #display frame from operation above
     cv2.imshow('frame', frame)
     cv2.imshow('gray', mask)
