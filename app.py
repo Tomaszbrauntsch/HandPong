@@ -207,6 +207,7 @@ def main():
             #Player Movement
         else:
             userXPos = cameraThread.run()
+            cameraThread.stop()
             if userXPos is None:
                 objectPos = 0
             else:
