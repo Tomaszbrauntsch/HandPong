@@ -201,7 +201,7 @@ def main():
                         cv2.circle(frame, center, 5, (0,0,255), -1)
                         mousey = ((int(x)/682)*288) #ground position = 300 #top position = 0
                 else:
-                    mousey = (int(x))
+                    mousey = playerOne.y
                 cv2.imshow('frame', frame)
 
                 playerOne.y = mousey
