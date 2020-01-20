@@ -57,7 +57,7 @@ def moveBall(ball, ballDirX, ballDirY):
 
 def checkEdgeCollision(ball, ballDirX, ballDirY):
     #Checks if top or bottom of ball then changes the ball direction by negative (x or y)
-    if ball.top >= (lineThickness) or ball.bottom <= (windowHeight - lineThickness):
+    if ball.top <= (lineThickness) or ball.bottom >= (windowHeight - lineThickness):
         ballDirY = ballDirY * -1
         #Add scoreboard when it gets completed when hits left or right and resets position
     return ballDirX, ballDirY
