@@ -198,6 +198,7 @@ def main():
     #spygame.mouse.set_visible(0) # make cursor invisible
     cameraThread = threading.Thread(target=cameraWork)
     cameraThread.start()
+    userXPos = None
     while True:
         #camera searching
         for event in pygame.event.get():
