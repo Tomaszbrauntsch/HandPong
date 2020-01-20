@@ -12,7 +12,8 @@ import cv2
 import random
 #number of frames per second
 #value determines speed of game
-#FPS = 300 #default 200
+FPS = 300 #default 200
+increaseSpeed = 5
 windowWidth = 400 #default 400
 windowHeight = 300 #default 300
 lineThickness = 6
@@ -50,8 +51,8 @@ def drawBall(ball):
 
 #Keeps track of ball direction
 def moveBall(ball, ballDirX, ballDirY):
-    ball.x += ballDirX
-    ball.y += ballDirY
+    ball.x += ballDirX * increaseSpeed
+    ball.y += ballDirY * increaseSpeed
     return ball
 
 def checkEdgeCollision(ball, ballDirX, ballDirY):
@@ -199,6 +200,7 @@ def main():
                         cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
                         cv2.circle(frame, center, 5, (0,0,255), -1)
                         mousey = ((int(x)/682)*288) #ground position = 300 #top position = 0
+                cv2.imshow('frame', frame)
 
                 playerOne.y = mousey
 
@@ -217,7 +219,7 @@ def main():
         displayScore(scoreLeft, scoreRight)
 
         pygame.display.update()
-        FPSCLOCK.tick(100000)
+        FPSCLOCK.tick(FPS)
 
 if __name__=='__main__':
     main()
