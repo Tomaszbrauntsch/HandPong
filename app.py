@@ -206,12 +206,12 @@ def main():
                 cap.release()
             #Player Movement
         else:
-            if not cameraThread.is_alive()
-            userXPos = cameraThread.start()
-            if userXPos is None:
-                objectPos = 0
-            else:
-                objectPos = int(userXPos)
+            if not cameraThread.is_alive():
+                userXPos = cameraThread.start()
+                if userXPos is None:
+                    objectPos = 0
+                else:
+                    objectPos = int(userXPos)
 
             if (objectPos < 341):     #341 is the center X coord
                 playerMoveY = (341 - objectPos - 147)
