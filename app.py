@@ -183,7 +183,7 @@ def main():
         else:
                 ret, frame = cap.read()
                 hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-                lower_range = np.array([19,85,143])
+                lower_range = np.array([49,85,143])
                 upper_range = np.array([180,255,255])
                 mask = cv2.inRange(hsv, lower_range, upper_range)
                 mask = cv2.erode(mask, None, iterations=2)
