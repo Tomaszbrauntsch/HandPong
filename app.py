@@ -198,9 +198,9 @@ def main():
                         cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
                         cv2.circle(frame, center, 5, (0,0,255), -1)
                         if (int(x) < 341):     #341 is the center X coord
-                            mousey = 341 - int(x)
+                            mousey = (341 - int(x) - 197)
                         elif (int(x) > 341):
-                            mousey = 341 + int(x)
+                            mousey = (int(x) - 341 + 197)
 
                 playerOne.y = mousey
 
