@@ -35,6 +35,43 @@ playerTwoColor = (235,14,165)
 directionBall = random.randint(0,10)
 
 
+def game_intro():
+    pygame.init()
+    FPSCLOCK = pygame.time.Clock()
+    gameDisplay = pygame.display.set_mode((windowWidth,windowHeight))
+    while True:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            #Start game
+            #Click Button y for multiplayer or click x for singleplayer
+            #If button y is clicked down (GPIO RPI), then play this game
+            #Maybe light an led
+            elif event.type == MOUSEBUTTONDOWN:
+                pygame.display.quit()
+                main()
+
+        gameDisplay.fill(WHITE)
+        titleFont = pygame.font.Font('freesansbold.ttf', 25)
+        singleFont = pygame.font.Font('freesansbold.ttf', 20)
+        multiFont = pygame.font.Font('freesansbold.ttf', 20)
+        textTitle = titleFont.render("Welcome to HandDraw", True, BLACK)
+        textSingle = singleFont.render("Click Button Y for SinglePlayer", True, BLACK)
+        textMulti = singleFont.render("Click Button X for Multiplayer", True, BLACK)
+        titleRect = textTitle.get_rect()
+        singleRect = textSingle.get_rect()
+        multiRect = textMulti.get_rect()
+        titleRect.center = ((windowWidth/2),(windowHeight/3))
+        singleRect.center = ((windowWidth/2), windowHeight-100)
+        multiRect.center = ((windowWidth/2), windowHeight-50)
+        gameDisplay.blit(textTitle, titleRect)
+        gameDisplay.blit(textSingle, singleRect)
+        gameDisplay.blit(textMulti, multiRect)
+        pygame.display.update()
+        FPSCLOCK.tick(15)
+
+
 def drawArena():
     displaySurf.fill((0,0,0))
     #draw outline of arena

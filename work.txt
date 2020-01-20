@@ -1,1 +1,6 @@
-add two players -> work on cosmetic items for the game (audio, features with the paddles, the game itself)
+-)add two players
+-)work on cosmetic items for the game (audio, features with the paddles, the game itself)
+-)add a version of two players and singleplayer ai mode
+-)wait time, so players can get ready to play the game
+
+
