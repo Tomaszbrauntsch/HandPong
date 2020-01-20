@@ -12,7 +12,7 @@ import cv2
 import random
 #number of frames per second
 #value determines speed of game
-FPS = 300 #default 200
+#FPS = 300 #default 200
 windowWidth = 400 #default 400
 windowHeight = 300 #default 300
 lineThickness = 6
@@ -218,7 +218,7 @@ def main():
         displayScore(scoreLeft, scoreRight)
 
         pygame.display.update()
-        FPSCLOCK.tick(FPS)
+        FPSCLOCK.tick(100000)
 
 if __name__=='__main__':
     main()
