@@ -10,6 +10,8 @@ import numpy as np
 import cv2
 #random
 import random
+#threading
+import threading
 #number of frames per second
 #value determines speed of game
 FPS = 300 #default 200
@@ -24,6 +26,8 @@ WHITE = (255,255,255)
 arenaColor = (137,52,235)
 playerOneColor = (18,235,14)
 playerTwoColor = (235,14,165)
+
+cap = cv2.VideoCapture(0)
 
 directionBall = random.randint(0,10)
 
@@ -127,6 +131,34 @@ def displayScore(scoreLeft, scoreRight):
     resultRect.topleft = (windowWidth - 150, 25)
     displaySurf.blit(resultSurf, resultRect)
 
+def cameraWork():
+    ret, frame = cap.read()
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    lower_range = np.array([7,130,130])
+    upper_range = np.array([50,255,255])
+
+    mask = cv2.inRange(hsv, lower_range, upper_range)
+    mask = cv2.erode(mask, None, iterations=2)
+    mask = cv2.dilate(mask, None, iterations=2)
+    cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+    center = None
+
+    if len(cnts)>0:
+        c = max(cnts, key=cv2.contourArea)
+        ((x,y), radius) = cv2.minEnclosingCircle(c)
+        M = cv2.moments(c)
+        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+
+        if radius > 10:
+            cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
+            cv2.circle(frame, center, 5, (0,0,255), -1)
+            if (int(x) < 341):     #341 is the center X coord
+                mousey = (341 - int(x) - 197)
+            elif (int(x) > 341):
+                mousey = (int(x) - 341 + 197)
+    cv2.imshow('frame', frame)
+    playerOne.y = mousey
+
 def main():
     pygame.init()
     global displaySurf
@@ -168,41 +200,17 @@ def main():
     print("ball x: " + str(ball.x))
     print("ball y: " + str(ball.y))
     #spygame.mouse.set_visible(0) # make cursor invisible
-    cap = cv2.VideoCapture(0)
+    cameraThread = threading.Thread(target=cameraWork)
     while True:
+        #camera searching
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
                 cap.release()
             #Player Movement
-            elif True:
-                ret, frame = cap.read()
-                hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-                lower_range = np.array([7,130,130])
-                upper_range = np.array([50,255,255])
-
-                mask = cv2.inRange(hsv, lower_range, upper_range)
-                mask = cv2.erode(mask, None, iterations=2)
-                mask = cv2.dilate(mask, None, iterations=2)
-                cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
-                center = None
-
-                if len(cnts)>0:
-                    c = max(cnts, key=cv2.contourArea)
-                    ((x,y), radius) = cv2.minEnclosingCircle(c)
-                    M = cv2.moments(c)
-                    center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-
-                    if radius > 10:
-                        cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
-                        cv2.circle(frame, center, 5, (0,0,255), -1)
-                        if (int(x) < 341):     #341 is the center X coord
-                            mousey = (341 - int(x) - 197)
-                        elif (int(x) > 341):
-                            mousey = (int(x) - 341 + 197)
-
-                playerOne.y = mousey
+        else:
+            cameraThread.run()
 
         drawArena()
         drawPaddle(playerOne, playerOneColor)
