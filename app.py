@@ -2,7 +2,9 @@
 #Everything is being built like a gui, layer over layer
 #displaySurf = Main window
 #
-#WORK ON OPENCV NOW
+#orange lego piece
+#lower_range = np.array([7,130,130])
+#upper_range = np.array([50,255,255])
 import pygame, sys
 from pygame.locals import *
 #camera manipulation
@@ -181,9 +183,8 @@ def main():
         else:
                 ret, frame = cap.read()
                 hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-                lower_range = np.array([7,130,130])
-                upper_range = np.array([50,255,255])
-
+                lower_range = np.array([19,85,143])
+                upper_range = np.array([180,255,255])
                 mask = cv2.inRange(hsv, lower_range, upper_range)
                 mask = cv2.erode(mask, None, iterations=2)
                 mask = cv2.dilate(mask, None, iterations=2)
