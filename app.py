@@ -174,8 +174,9 @@ def main():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+                cap.release()
             #Player Movement
-            elif cap == cv2.VideoCapture(0):
+            elif True:
                 ret, frame = cap.read()
                 hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
                 lower_range = np.array([7,130,130])
