@@ -212,7 +212,7 @@ def main():
             #Player Movement
         else:
             cameraThread.run()
-            playerOne.y =
+            playerOne.y = playerMoveY
 
         drawArena()
         drawPaddle(playerOne, playerOneColor)
