@@ -200,7 +200,7 @@ def main():
                         cv2.circle(frame, center, 5, (0,0,255), -1)
                         if (int(x) < 341):     #341 is the center X coord
                             #mousey = (-1*(-1*int(x)) - 341 + 10)\
-                            mousey = 30
+                            mousey = 100
                         elif (int(x) > 341):
                             #mousey = (int(x) - 341 + 10)
                             mousey = 10
