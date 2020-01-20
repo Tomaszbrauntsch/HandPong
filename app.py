@@ -80,10 +80,10 @@ def AI(ball, ballDirX, playerTwo):
 
 def checkHitBall(ball, playerOne, playerTwo, ballDirX):
     #If if statment is true (if ball collides with paddle) changes the ballDirX by negative if all false leave it in its current form
-    if ballDirX == -1 and ((playerOne.right == ball.left and playerOne.top <= ball.top and playerOne.bottom >= ball.bottom)):
+    if ballDirX == -1 and ((playerOne.right >= ball.left and playerOne.top <= ball.top and playerOne.bottom >= ball.bottom)):
 
         return -1
-    elif ballDirX == 1 and ((playerTwo.left == ball.right and playerTwo.top <= ball.top and playerTwo.bottom >= ball.bottom)):
+    elif ballDirX == 1 and ((playerTwo.left <= ball.right and playerTwo.top <= ball.top and playerTwo.bottom >= ball.bottom)):
         return -1
     else:
         return 1
