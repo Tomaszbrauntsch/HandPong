@@ -201,7 +201,7 @@ def main():
                         if (int(x) < 341):     #341 is the center X coord
                             mousey = (341 - int(x) - 125)
                         elif (int(x) > 341):
-                            mousey = (int(x) - 341* + 125)
+                            mousey = (int(x) - 341 + 147)
                 cv2.imshow('frame', frame)
 
                 playerOne.y = mousey
