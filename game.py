@@ -175,6 +175,7 @@ def main():
                 mousex, mousey = event.pos
                 playerOne.y = mousey
 
+
         drawArena()
         drawPaddle(playerOne, playerOneColor)
         drawPaddle(playerTwo, playerTwoColor)
