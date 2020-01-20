@@ -152,9 +152,6 @@ def cameraWork():
         if radius > 10:
             cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
             cv2.circle(frame, center, 5, (0,0,255), -1)
-            return int(x)
-    else:
-        return 0
     cv2.imshow('frame', frame)
     return int(x)
 
@@ -210,7 +207,11 @@ def main():
             #Player Movement
         else:
             userXPos = cameraThread.run()
-            objectPos = int(userXPos)
+            if userXPos is None:
+                objectPos = 0
+            else:
+                objectPos = int(userXPos)
+                
             if (objectPos < 341):     #341 is the center X coord
                 mousey = (341 - int(x) - 147)
             elif (objectPos > 341):
