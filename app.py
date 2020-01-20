@@ -1,4 +1,8 @@
-#KEY:
+#
+#Change the increase Speed to change speed of ball
+#If changing increase speed, and want to use AI, change playerTwo.y as well
+#If changing HSV for different color, change the hsv of lower and upper range
+#
 #Everything is being built like a gui, layer over layer
 #displaySurf = Main window
 #
@@ -183,6 +187,7 @@ def main():
         else:
                 ret, frame = cap.read()
                 hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                #Color of pink highlighter
                 lower_range = np.array([49,85,143])
                 upper_range = np.array([180,255,255])
                 mask = cv2.inRange(hsv, lower_range, upper_range)
@@ -200,7 +205,7 @@ def main():
                     if radius > 10:
                         cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
                         cv2.circle(frame, center, 5, (0,0,255), -1)
-                        mousey = ((int(x)/682)*288) #ground position = 300 #top position = 0
+                        mousey = ((int(x)/682)*(windowHeight - (lineThickness)*2)) #ground position = 300 #top position = 0
                 else:
                     mousey = playerOne.y
                 cv2.imshow('frame', frame)

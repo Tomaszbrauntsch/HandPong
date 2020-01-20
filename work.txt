@@ -1,1 +1,1 @@
-Manipulate item position and incooperating it with canvas drawing -> display the item position, where the hand is moving -> calibrating camera each time
+add two players -> work on cosmetic items for the game (audio, features with the paddles, the game itself)
