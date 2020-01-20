@@ -197,6 +197,7 @@ def main():
     print("ball y: " + str(ball.y))
     #spygame.mouse.set_visible(0) # make cursor invisible
     cameraThread = threading.Thread(target=cameraWork)
+    cameraThread.start()
     while True:
         #camera searching
         for event in pygame.event.get():
