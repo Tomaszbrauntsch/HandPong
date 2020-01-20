@@ -28,6 +28,7 @@ playerOneColor = (18,235,14)
 playerTwoColor = (235,14,165)
 
 cap = cv2.VideoCapture(0)
+playerMoveY = 0
 
 directionBall = random.randint(0,10)
 
@@ -157,7 +158,7 @@ def cameraWork():
             elif (int(x) > 341):
                 mousey = (int(x) - 341 + 197)
     cv2.imshow('frame', frame)
-    playerOne.y = mousey
+    playerOne.y = playerMoveY
 
 def main():
     pygame.init()
@@ -211,6 +212,7 @@ def main():
             #Player Movement
         else:
             cameraThread.run()
+            playerOne.y =
 
         drawArena()
         drawPaddle(playerOne, playerOneColor)
