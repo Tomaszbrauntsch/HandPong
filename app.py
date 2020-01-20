@@ -206,8 +206,7 @@ def main():
                 cap.release()
             #Player Movement
         else:
-            userXPos = cameraThread.run()
-            cameraThread.stop()
+            userXPos = cameraThread.start()
             if userXPos is None:
                 objectPos = 0
             else:
