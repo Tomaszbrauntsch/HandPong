@@ -12,7 +12,7 @@ import cv2
 import random
 #number of frames per second
 #value determines speed of game
-FPS = 1000 #default 200
+FPS = 3000 #default 200
 windowWidth = 400 #default 400
 windowHeight = 300 #default 300
 lineThickness = 6
