@@ -65,17 +65,17 @@ def checkEdgeCollision(ball, ballDirX, ballDirY):
 def AI(ball, ballDirX, playerTwo):
     #AI for player 2
     #if ball is moving away from paddle, center paddle
-    if ballDirX == -1:
+    if ballDirX <= -1:
         if playerTwo.centery < (windowHeight/2):
-            playerTwo.y += 1
+            playerTwo.y += 5
         elif playerTwo.centery > (windowHeight/2):
-            playerTwo.y -= 1
+            playerTwo.y -= 5
     #if ball is moving towards paddle, track movement
-    elif ballDirX == 1:
+    elif ballDirX >= 1:
         if playerTwo.centery < ball.centery:
-            playerTwo.y += 1
+            playerTwo.y += 5
         else:
-            playerTwo.y -= 1
+            playerTwo.y -= 5
     return playerTwo
 
 def checkHitBall(ball, playerOne, playerTwo, ballDirX):
