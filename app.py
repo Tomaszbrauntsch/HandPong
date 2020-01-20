@@ -91,7 +91,7 @@ def checkHitBall(ball, playerOne, playerTwo, ballDirX):
 def pointScoredp1(ball, scoreLeft, directionBall, ballDirX, ballDirY):
     #if player-side wall gets hit give score opposite side
     #ball hits left side
-    if ball.right == (windowWidth - lineThickness):
+    if ball.right >= (windowWidth - lineThickness):
         scoreLeft += 1
         ball.x = 197 #moves to default x
         ball.y = 147 #moves to default y
@@ -106,7 +106,7 @@ def pointScoredp1(ball, scoreLeft, directionBall, ballDirX, ballDirY):
         return scoreLeft
 
 def pointScoredp2(ball, scoreRight, directionBall, ballDirX, ballDirY):
-    if ball.left == (lineThickness):
+    if ball.left <= (lineThickness):
         scoreRight += 1
         ball.x = 197 #moves to default x
         ball.y = 147 #moves to default y
