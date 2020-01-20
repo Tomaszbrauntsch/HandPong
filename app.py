@@ -198,7 +198,7 @@ def main():
                     if radius > 10:
                         cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
                         cv2.circle(frame, center, 5, (0,0,255), -1)
-                        mousey = ((int(x)/682)*300) #ground position = 300 #top position = 0
+                        mousey = ((int(x)/670)*300) #ground position = 300 #top position = 0
                 cv2.imshow('frame', frame)
 
                 playerOne.y = mousey
