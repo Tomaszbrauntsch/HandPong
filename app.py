@@ -152,6 +152,8 @@ def cameraWork():
         if radius > 10:
             cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
             cv2.circle(frame, center, 5, (0,0,255), -1)
+    else:
+        return int(x)
     cv2.imshow('frame', frame)
     return int(x)
 
