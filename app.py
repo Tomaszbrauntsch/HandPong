@@ -211,11 +211,11 @@ def main():
                 objectPos = 0
             else:
                 objectPos = int(userXPos)
-                
+
             if (objectPos < 341):     #341 is the center X coord
-                mousey = (341 - int(x) - 147)
+                playerMoveY = (341 - objectPos - 147)
             elif (objectPos > 341):
-                mousey = (int(x) - 341 + 147)
+                playerMoveY = (objectPos - 341 + 147)
             playerOne.y = playerMoveY
 
         drawArena()
