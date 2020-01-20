@@ -28,8 +28,8 @@ playerOneColor = (18,235,14)
 playerTwoColor = (235,14,165)
 
 cap = cv2.VideoCapture(0)
-playerOne = 0
-playerMoveY = 0
+playerOne = None
+playerMoveY = None
 
 directionBall = random.randint(0,10)
 
