@@ -7,13 +7,17 @@ import pygame, sys
 from pygame.locals import *
 
 import random
+from time import sleep
 #number of frames per second
 #value determines speed of game
 FPS = 300 #default 200
-windowWidth = 400 #default 400
-windowHeight = 300 #default 300
+FPSCLOCK = pygame.time.Clock()
+global increaseSpeed
+increaseSpeed = 3
+windowWidth = 1200 #default 400
+windowHeight = 800#default 300
 lineThickness = 6
-paddleSize = 50
+paddleSize = 100
 paddleOffset = 20
 
 BLACK = (0,0,0)
@@ -26,8 +30,7 @@ directionBall = random.randint(0,10)
 
 def game_intro():
     pygame.init()
-    FPSCLOCK = pygame.time.Clock()
-    gameDisplay = pygame.display.set_mode((windowWidth,windowHeight))
+    gameDisplay = pygame.display.set_mode((windowWidth,windowHeight), pygame.FULLSCREEN)
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -35,6 +38,10 @@ def game_intro():
                 sys.exit()
             #Start game
             #Click Button y for multiplayer or click x for singleplayer
+            elif event.type == pygame.KEYDOWN:
+                if event.key == K_q:
+                    pygame.quit()
+                    sys.exit()
             elif event.type == MOUSEBUTTONDOWN:
                 pygame.display.quit()
                 main()
@@ -75,13 +82,13 @@ def drawBall(ball):
 
 #Keeps track of ball direction
 def moveBall(ball, ballDirX, ballDirY):
-    ball.x += ballDirX
-    ball.y += ballDirY
+    ball.x += ballDirX * increaseSpeed
+    ball.y += ballDirY * increaseSpeed
     return ball
 
 def checkEdgeCollision(ball, ballDirX, ballDirY):
     #Checks if top or bottom of ball then changes the ball direction by negative (x or y)
-    if ball.top == (lineThickness) or ball.bottom == (windowHeight - lineThickness):
+    if ball.top <= (lineThickness) or ball.bottom >= (windowHeight - lineThickness):
         ballDirY = ballDirY * -1
         #Add scoreboard when it gets completed when hits left or right and resets position
     return ballDirX, ballDirY
@@ -104,10 +111,9 @@ def AI(ball, ballDirX, playerTwo):
 
 def checkHitBall(ball, playerOne, playerTwo, ballDirX):
     #If if statment is true (if ball collides with paddle) changes the ballDirX by negative if all false leave it in its current form
-    if ballDirX == -1 and ((playerOne.right == ball.left and playerOne.top <= ball.top and playerOne.bottom >= ball.bottom)):
-
+    if ballDirX == -1 and ((playerOne.right >= ball.left and playerOne.top <= ball.top and playerOne.bottom >= ball.bottom)):
         return -1
-    elif ballDirX == 1 and ((playerTwo.left == ball.right and playerTwo.top <= ball.top and playerTwo.bottom >= ball.bottom)):
+    elif ballDirX == 1 and ((playerTwo.left <= ball.right and playerTwo.top <= ball.top and playerTwo.bottom >= ball.bottom)):
         return -1
     else:
         return 1
@@ -115,10 +121,10 @@ def checkHitBall(ball, playerOne, playerTwo, ballDirX):
 def pointScoredp1(ball, scoreLeft, directionBall, ballDirX, ballDirY):
     #if player-side wall gets hit give score opposite side
     #ball hits left side
-    if ball.right == (windowWidth - lineThickness):
+    if ball.right >= (windowWidth - lineThickness):
         scoreLeft += 1
-        ball.x = 197 #moves to default x
-        ball.y = 147 #moves to default y
+        ball.x = (windowWidth/2) - 3 #moves to default x #400 = 197
+        ball.y = (windowHeight/2) - 3 #moves to default y #300 = 147
         directionBall = random.randint(0,6)
         ballDirX = -1
         if directionBall <= 3:
@@ -130,10 +136,10 @@ def pointScoredp1(ball, scoreLeft, directionBall, ballDirX, ballDirY):
         return scoreLeft
 
 def pointScoredp2(ball, scoreRight, directionBall, ballDirX, ballDirY):
-    if ball.left == (lineThickness):
+    if ball.left <= (lineThickness):
         scoreRight += 1
-        ball.x = 197 #moves to default x
-        ball.y = 147 #moves to default y
+        ball.x = (windowWidth/2) - 3 #moves to default x
+        ball.y = (windowHeight/2) - 3 #moves to default y
         directionBall = random.randint(0,6)
         ballDirX = 1
         if directionBall <= 3:
@@ -146,22 +152,61 @@ def pointScoredp2(ball, scoreRight, directionBall, ballDirX, ballDirY):
         #ball hits right side
 #TODO: Score is not working left and right will each get different score
 def displayScore(scoreLeft, scoreRight):
-    #display text
-    resultSurf = basicFont.render(str(scoreLeft) + ' | ' + str(scoreRight), True, WHITE)
-    resultRect = resultSurf.get_rect()
-    resultRect.topleft = (windowWidth - 150, 25)
-    displaySurf.blit(resultSurf, resultRect)
+    #used for score text
+    global basicFont, basicFontSize
+    basicFontSize = 120
+    basicFont = pygame.font.Font('freesansbold.ttf', basicFontSize)
+    if scoreLeft == 5:
+        mainText = "Left is the Winner"
+        basicFontSize = 35
+        basicFont = pygame.font.Font('freesansbold.ttf', basicFontSize)
+    elif scoreRight == 5:
+        mainText = "Right is the Winner"
+        basicFontSize = 35
+        basicFont = pygame.font.Font('freesansbold.ttf', basicFontSize)
+    else:
+        mainText = (str(scoreLeft) + '   ' + str(scoreRight))
+
+    updateText(mainText, basicFontSize)
+
+    if scoreLeft == 5 or scoreRight == 5:
+        sleep(2)
+        pygame.quit()
+        sys.exit()
+
+def countDown():
+    drawArena()
+    updateText("3", 120)
+    sleep(1)
+    displaySurf.fill((0,0,0))
+    drawArena()
+    updateText("2", 120)
+    sleep(1)
+    displaySurf.fill((0,0,0))
+    drawArena()
+    updateText("1", 120)
+    sleep(1)
+    displaySurf.fill((0,0,0))
+    drawArena()
+    updateText("START", 120)
+    sleep(0.5)
+
+def updateText(stringInput, fontSize):
+    basicFontSize = fontSize
+    basicFont = pygame.font.Font('freesansbold.ttf', basicFontSize)
+    textSurf = basicFont.render(stringInput, True, WHITE)
+    textRect = textSurf.get_rect()
+    textRect.center = (windowWidth/2, windowHeight/2)
+    #if one is bigger then the other, then do Left wins / Right wins
+    displaySurf.blit(textSurf, textRect)
+    pygame.display.update()
+
 
 def main():
     pygame.init()
     global displaySurf
-    #used for score text
-    global basicFont, basicFontSize
-    basicFontSize = 20
-    basicFont = pygame.font.Font('freesansbold.ttf', basicFontSize)
-
-    FPSCLOCK = pygame.time.Clock()
-    displaySurf = pygame.display.set_mode((windowWidth,windowHeight))
+    #insert Show score animation
+    displaySurf = pygame.display.set_mode((windowWidth,windowHeight), pygame.FULLSCREEN)
     pygame.display.set_caption('Pong')
 
     #initialize and setting starting positions of ball and paddle
@@ -192,13 +237,20 @@ def main():
     ball = pygame.Rect(ballX, ballY, lineThickness, lineThickness)
     print("ball x: " + str(ball.x))
     print("ball y: " + str(ball.y))
-    #spygame.mouse.set_visible(0) # make cursor invisible
+    pygame.mouse.set_visible(0) # make cursor invisible
+    sleep(5)
+    #starting in 3...2...1
+    countDown()
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
             #Player Movement
+            elif event.type == pygame.KEYDOWN:
+                if event.key == K_q:
+                    pygame.quit()
+                    sys.exit()
             elif event.type == MOUSEMOTION:
                 mousex, mousey = event.pos
                 playerOne.y = mousey
