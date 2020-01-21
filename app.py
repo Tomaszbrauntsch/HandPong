@@ -21,10 +21,10 @@ from time import sleep
 #number of frames per second
 #value determines speed of game
 FPS = 300 #default 200
-increaseSpeed = 5
 FPSCLOCK = pygame.time.Clock()
-windowWidth = 1920 #default 400
-windowHeight = 1080 #default 300
+increaseSpeed = 5
+windowWidth = 800 #default 400
+windowHeight = 600 #default 300
 lineThickness = 6
 paddleSize = 50
 paddleOffset = 20
@@ -36,7 +36,6 @@ playerOneColor = (18,235,14)
 playerTwoColor = (235,14,165)
 
 directionBall = random.randint(0,10)
-
 
 def game_intro():
     pygame.init()
@@ -77,7 +76,6 @@ def game_intro():
         gameDisplay.blit(textMulti, multiRect)
         pygame.display.update()
         FPSCLOCK.tick(15)
-
 
 def drawArena():
     displaySurf.fill((0,0,0))
@@ -131,36 +129,34 @@ def AI(ball, ballDirX, playerTwo):
 def checkHitBall(ball, playerOne, playerTwo, ballDirX):
     #If if statment is true (if ball collides with paddle) changes the ballDirX by negative if all false leave it in its current form
     if ballDirX == -1 and ((playerOne.right >= ball.left and playerOne.top <= ball.top and playerOne.bottom >= ball.bottom)):
-
         return -1
     elif ballDirX == 1 and ((playerTwo.left <= ball.right and playerTwo.top <= ball.top and playerTwo.bottom >= ball.bottom)):
         return -1
     else:
         return 1
 
-def pointScoredp1(ball, scoreLeft, directionBall, ballDirX, ballDirY, increaseSpeed):
+def pointScoredp1(ball, scoreLeft, directionBall, ballDirX, ballDirY):
     #if player-side wall gets hit give score opposite side
     #ball hits left side
     if ball.right >= (windowWidth - lineThickness):
         scoreLeft += 1
-        ball.x = (windowWidth/2) - 3#moves to default x
-        ball.y = (windowHeight/2) - 3 #moves to default y
+        ball.x = 197 #moves to default x
+        ball.y = 147 #moves to default y
         directionBall = random.randint(0,6)
         ballDirX = -1
         if directionBall <= 3:
             ballDirY = -1
         else:
             ballDirY = 1
-        increaseSpeed += 1
         return scoreLeft
     else:
         return scoreLeft
 
-def pointScoredp2(ball, scoreRight, directionBall, ballDirX, ballDirY, increaseSpeed):
+def pointScoredp2(ball, scoreRight, directionBall, ballDirX, ballDirY):
     if ball.left <= (lineThickness):
         scoreRight += 1
         ball.x = (windowWidth/2) - 3 #moves to default x
-        ball.y = (windowHeight/2) - 3  #moves to default y
+        ball.y = (windowHeight/2) - 3 #moves to default y
         directionBall = random.randint(0,6)
         ballDirX = 1
         if directionBall <= 3:
@@ -226,8 +222,9 @@ def main():
     pygame.init()
     global displaySurf
     #used for score text
-    displaySurf = pygame.display.set_mode((windowWidth,windowHeight), pygame.FULLSCREEN)
+    global basicFont, basicFontSize
 
+    displaySurf = pygame.display.set_mode((windowWidth,windowHeight), pygame.FULLSCREEN)
     pygame.display.set_caption('Pong')
 
     #initialize and setting starting positions of ball and paddle
@@ -258,10 +255,10 @@ def main():
     ball = pygame.Rect(ballX, ballY, lineThickness, lineThickness)
     print("ball x: " + str(ball.x))
     print("ball y: " + str(ball.y))
-    pygame.mouse.set_visible(0) # make cursor invisible
+    #spygame.mouse.set_visible(0) # make cursor invisible
+    cap = cv2.VideoCapture(0)
     sleep(5)
     countDown()
-    cap = cv2.VideoCapture(0)
     while True:
         #camera searching
         for event in pygame.event.get():
@@ -274,33 +271,33 @@ def main():
                 if event.key == K_q:
                     pygame.quit()
                     sys.exit()
-            else:
-                    ret, frame = cap.read()
-                    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-                    #Color of pink highlighter
-                    lower_range = np.array([49,85,143])
-                    upper_range = np.array([180,255,255])
-                    mask = cv2.inRange(hsv, lower_range, upper_range)
-                    mask = cv2.erode(mask, None, iterations=2)
-                    mask = cv2.dilate(mask, None, iterations=2)
-                    cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
-                    center = None
+        else:
+                ret, frame = cap.read()
+                hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                #Color of pink highlighter
+                lower_range = np.array([49,85,143])
+                upper_range = np.array([180,255,255])
+                mask = cv2.inRange(hsv, lower_range, upper_range)
+                mask = cv2.erode(mask, None, iterations=2)
+                mask = cv2.dilate(mask, None, iterations=2)
+                cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+                center = None
 
-                    if len(cnts)>0:
-                        c = max(cnts, key=cv2.contourArea)
-                        ((x,y), radius) = cv2.minEnclosingCircle(c)
-                        M = cv2.moments(c)
-                        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+                if len(cnts)>0:
+                    c = max(cnts, key=cv2.contourArea)
+                    ((x,y), radius) = cv2.minEnclosingCircle(c)
+                    M = cv2.moments(c)
+                    center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
-                        if radius > 10:
-                            cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
-                            cv2.circle(frame, center, 5, (0,0,255), -1)
-                            mousey = ((int(x)/682)*(windowHeight - (lineThickness)*2)) #ground position = 300 #top position = 0
-                    else:
-                        mousey = playerOne.y
-                    cv2.imshow('frame', frame)
+                    if radius > 10:
+                        cv2.circle(frame, (int(x), int(y)) , int(radius), (0,255,255), 2)
+                        cv2.circle(frame, center, 5, (0,0,255), -1)
+                        mousey = ((int(x)/682)*(windowHeight - (lineThickness)*2)) #ground position = 300 #top position = 0
+                else:
+                    mousey = playerOne.y
+                #cv2.imshow('frame', frame)
 
-                    playerOne.y = mousey
+                playerOne.y = mousey
 
         drawArena()
         drawPaddle(playerOne, playerOneColor)
