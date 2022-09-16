@@ -27,8 +27,8 @@ pip3 install pygame
 
 ## Deployment
 
-When using for your own need, all you need to do is, change some values around
-All the values that will be needed to change are all in the header of comments 
+When using for your own need, all you need to do is, change some values around.
+All the values that will be needed to changed are in the header of comments.
 
 ## Built With
 
