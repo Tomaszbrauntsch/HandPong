@@ -1,7 +1,7 @@
-# HandDraw
+# HandPong
 
 Welcome to a new way to play your games, currently only working on the classic game, Pong.
-It takes a unique stance at gaming, using the power of a computer, camera and some software you can control movements with your hand
+It takes a unique stance at gaming, using the power of a computer, a camera and some software you can control movements with your hand
 
 ## Getting Started
 
