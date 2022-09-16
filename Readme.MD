@@ -41,6 +41,6 @@ All the values that will be needed to changed are in the header of comments.
 
 ## License
 
-This project is licensed under the CC0 License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the CC0 License - see the [LICENSE](LICENSE) file for details
 
 
